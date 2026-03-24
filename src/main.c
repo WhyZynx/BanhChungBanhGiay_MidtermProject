@@ -5,6 +5,7 @@
 
 #define PI 3.1415926535
 
+// Check if a number is a Fibonacci number
 int fibonacci(int num) {
     if (num < 0) return 0; 
     if (num == 0 || num == 1) return 1; 
@@ -17,7 +18,7 @@ int fibonacci(int num) {
     return (f == num);
 }
 
-
+// Check if two numbers are amicable
 int amicable(int a, int b) {
     int sum_a = 0, sum_b = 0;
     for (int i = 1; i <= a / 2; i++) {
@@ -32,12 +33,15 @@ int amicable(int a, int b) {
 int main(){
 
     FILE *fin, *fout;
+    
+    // Open input file
     fin = fopen("input.inp", "r");
     if (fin == NULL){
         printf("Error");
         exit(1);
     }
 
+     // Open output file
     fout = fopen("output.out", "w");
     if (fout == NULL){
         printf("Error");
@@ -72,13 +76,16 @@ int main(){
         return 1;
     }
     
-    float nbc = pow(dc, 2) * sqrt(dc);
-    float nbg = (pow(dg, 2) * PI )/ 3; 
-    
+    float nbc = pow(dc, 2) * sqrt(dc);        // Banh Chung
+    float nbg = (pow(dg, 2) * PI )/ 3;        // Banh Giay
+
+    // Leaves required per cake
     int ldbc = 1 + (dc >= 8);
     int ldbg = 1 + (dg >= 5); 
     
     float nep = n;
+
+    // WIND: prioritize Banh Chung first
     if (strcmp("Wind", w) == 0){
         
         while(nep >= nbc && ld >= ldbc){
@@ -95,6 +102,7 @@ int main(){
             
     }
 
+    // RAIN: balance bc and bg first
     else if(strcmp("Rain", w) == 0){
         while (nep >= nbc + nbg && ld >= ldbc + ldbg) {
             bc++;
@@ -132,7 +140,7 @@ int main(){
         }
     }
 
-
+    // SUN: modify resources then change weather
     else if (strcmp("Sun", w) == 0) {
         int G = dc % 6;
         int H = ld % 5;
@@ -265,7 +273,7 @@ int main(){
         }
     }
 
-
+    // FOG: adjust cake sizes
     else if (strcmp("Fog", w) == 0) {
         if (fibonacci(dc) && fibonacci(dg)) {
             dc /= 2;
@@ -296,7 +304,7 @@ int main(){
 
     }
 
-    
+    // CLOUD: prioritize Banh Giay, check amicable
     else if (strcmp("Cloud", w) == 0) {
         if (amicable((int)nep, ld)) {
             fprintf(fout, "0 0 %.3f", nep);
